@@ -31,9 +31,6 @@ const Sale = () => {
 
   // Find the selected product
   const selectedProductData = products.find((p) => p.name === selectedProduct);
-  // const calculatedPrice = selectedProductData
-  //   ? selectedProductData.price * quantity
-  //   : "";
 
   const formatDate = (inputDate) => {
     if (!inputDate) return "";
@@ -66,7 +63,12 @@ const Sale = () => {
       setQuantity("");
       setDate("");
     }
-    // console.log(productToAdd);
+  };
+
+  const handleRemove = (name) => {
+    setSelectedProducts((prevProducts) =>
+      prevProducts.filter((p) => p.name !== name)
+    );
   };
 
   return (
@@ -133,42 +135,55 @@ const Sale = () => {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-4 py-3 text-center">
                         Product name
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-4 py-3 text-center">
                         Sale Price
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-4 py-3 text-center">
                         Quantity
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-4 py-3 text-center">
                         Price
                       </th>
-                      <th scope="col" className="px-6 py-3">
+                      <th scope="col" className="px-4 py-3 text-center">
                         Date
+                      </th>
+                      <th scope="col" className="px-1 py-3 text-center">
+                        Menu
                       </th>
                     </tr>
                   </thead>
 
                   <tbody>
                     {selectedProducts.length < 1 && (
-                      <h1 className="font-semibold text-red-600 mt-6">
-                        No product is added! Please add a product.
-                      </h1>
+                      <tr className="font-semibold text-red-600 mt-6">
+                        <td>No product is added! Please add a product.</td>
+                      </tr>
                     )}
+
                     {selectedProducts.map((item, index) => (
                       <tr
                         key={index}
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                       >
-                        <td className="px-6 py-4">{item.name}</td>
-                        <td className="px-6 py-4">{item.price}</td>
-                        <td className="px-6 py-4">{item.quantity}</td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 py-4 text-center">{item.name}</td>
+                        <td className="px-4 py-4 text-center">{item.price}</td>
+                        <td className="px-4 py-4 text-center">
+                          {item.quantity}
+                        </td>
+                        <td className="px-4 py-4 text-center">
                           {item.price * item.quantity}
                         </td>
-                        <td className="px-6 py-4">{item.date || ""}</td>
+                        <td className="px-4 py-4 text-center">
+                          {item.date || ""}
+                        </td>
+                        <td className="px-4 py-4 text-center">
+                          <button onClick={() => handleRemove(item.name)}>
+                            X
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -190,10 +205,48 @@ const Sale = () => {
               )}
             </div>
           </div>
-          <div className="w-[30%] mt-5 border border-gray-300">
+          <div className="w-[30%] mt-5 border border-gray-300 px-2 text-slate-500 rounded-md shadow-md">
             <h1 className="font-semibold text-center uppercase">
               Voucher Preview
             </h1>
+
+            <div className="flex justify-between">
+              <p>Products list</p>
+              <p>Date - {Date.now()}</p>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    Product
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Amt
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Qty
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Price
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {selectedProducts.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  >
+                    <td className="px-6 py-4">{item.name}</td>
+                    <td className="px-6 py-4">{item.price}</td>
+                    <td className="px-6 py-4">{item.quantity}</td>
+                    <td className="px-6 py-4">{item.price * item.quantity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
