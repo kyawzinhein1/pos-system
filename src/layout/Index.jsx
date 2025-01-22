@@ -4,9 +4,11 @@ import Nav from "../components/Nav";
 
 const Index = () => {
   return (
-    <section className="max-w-5xl mx-auto">
+    <section>
       <Nav />
-      <Outlet />
+      <div className="px-5">
+        <Outlet />
+      </div>
     </section>
   );
 };
