@@ -6,9 +6,7 @@ const Index = () => {
   return (
     <section>
       <Nav />
-      <div className="px-5">
-        <Outlet />
-      </div>
+      <Outlet />
     </section>
   );
 };

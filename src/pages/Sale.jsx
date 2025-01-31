@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import useSaleStore from "../store/store";
+import useSaleStore from "../store/sale";
 
 const Sale = () => {
   const {
@@ -24,7 +23,8 @@ const Sale = () => {
   };
 
   return (
-    <section>
+    <section className="container mx-auto mt-10">
+      <h1 className="text-2xl font-semibold mb-4">Sale</h1>
       <div>
         {/* selection section */}
         <div className="mt-6 flex justify-center">
@@ -86,8 +86,8 @@ const Sale = () => {
             {/* products show after selected */}
             <div className="mt-5">
               <div>
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <table className="w-full border-collapse border border-gray-300">
+                  <thead className="bg-gray-100">
                     <tr>
                       <th scope="col" className="px-4 py-3 text-center">
                         Product name
@@ -118,10 +118,7 @@ const Sale = () => {
                     )}
 
                     {selectedProducts.map((item, index) => (
-                      <tr
-                        key={index}
-                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                      >
+                      <tr key={index} className="bg-white border-b">
                         <td className="px-4 py-4 text-center">{item.name}</td>
                         <td className="px-4 py-4 text-center">{item.price}</td>
                         <td className="px-4 py-4 text-center">
@@ -134,8 +131,12 @@ const Sale = () => {
                           {formatDate(item.date) || ""}
                         </td>
                         <td className="px-4 py-4 text-center">
-                          <button onClick={() => removeProduct(item.name)}>
-                            X
+                          <button
+                            onClick={() => removeProduct(item.name)}
+                            className="text-white bg-red-600 w-5 h-5 rounded-full shadow-md"
+                            title="Remove !"
+                          >
+                            -
                           </button>
                         </td>
                       </tr>
@@ -195,10 +196,7 @@ const Sale = () => {
 
                 <tbody>
                   {selectedProducts.map((item, index) => (
-                    <tr
-                      key={index}
-                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                    >
+                    <tr key={index} className="bg-white border-b">
                       <td className="px-6 py-4">{item.name}</td>
                       <td className="px-6 py-4">{item.price}</td>
                       <td className="px-6 py-4">{item.quantity}</td>
