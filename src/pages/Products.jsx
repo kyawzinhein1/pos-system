@@ -1,19 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useProductStore from "../store/product";
 
 const Products = () => {
-  const { products, addProduct, removeProductFromList } = useProductStore();
+  const { products, fetchProducts, addProduct, removeProductFromList } =
+    useProductStore();
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
 
-  const handleAddProduct = () => {
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleAddProduct = async () => {
     if (!name || !category || !price) {
       alert("Please fill all fields.");
       return;
     }
 
-    addProduct({ name, category, price: Number(price) });
+    const newProduct = {
+      name,
+      category,
+      price: Number(price),
+    };
+
+    await addProduct(newProduct);
     setName("");
     setCategory("");
     setPrice("");
@@ -69,11 +80,11 @@ const Products = () => {
             <tr key={index} className="text-center border border-gray-300">
               <td className="px-4 py-2">{product.name}</td>
               <td className="px-4 py-2">{product.category}</td>
-              <td className="px-4 py-2">${product.price}</td>
+              <td className="px-4 py-2">{product.price}</td>
               <td className="px-4 py-2">
                 <button
                   className="bg-red-600 px-3 py-1 text-white rounded-md hover:bg-red-800 transition-all"
-                  onClick={() => removeProductFromList(product.name)}
+                  onClick={() => removeProductFromList(product.id)}
                 >
                   Remove
                 </button>

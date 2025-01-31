@@ -1,0 +1,16 @@
+{
+  "products": [
+    {
+      "id": "39e9",
+      "name": "testing product",
+      "category": "testing",
+      "price": 1000
+    },
+    {
+      "id": "9eed",
+      "name": "demo product",
+      "category": "testing",
+      "price": 5000
+    }
+  ]
+}
