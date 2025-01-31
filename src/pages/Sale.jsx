@@ -1,74 +1,26 @@
 import React, { useState } from "react";
+import useSaleStore from "../store/store";
 
 const Sale = () => {
-  const [selectedProducts, setSelectedProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [date, setDate] = useState("");
+  const {
+    selectedProducts,
+    selectedProduct,
+    quantity,
+    date,
+    products,
+    setSelectedProduct,
+    setQuantity,
+    setDate,
+    addProductToCart,
+    removeProduct,
+    clearSelectedProducts,
+  } = useSaleStore();
 
-  const products = [
-    {
-      name: "Earphone",
-      category: "Accessories",
-      price: 5000,
-    },
-    {
-      name: "Powerbank",
-      category: "Gadget",
-      price: 10000,
-    },
-    {
-      name: "Adapter",
-      category: "Accessories",
-      price: 20000,
-    },
-    {
-      name: "Screen Guard",
-      category: "Accessories",
-      price: 4500,
-    },
-  ];
-
-  // Find the selected product
-  const selectedProductData = products.find((p) => p.name === selectedProduct);
-
+  // change date format
   const formatDate = (inputDate) => {
     if (!inputDate) return "";
     const [year, month, day] = inputDate.split("-");
-    return `${day}-${month}-${year}`;
-  };
-
-  const handleAddtoCart = () => {
-    if (!selectedProduct) {
-      alert("Plase choose a product.");
-      return;
-    } else if (!quantity) {
-      alert("Please add quantity.");
-      return;
-    } else if (!date) {
-      alert("Date is empty.");
-      return;
-    }
-
-    const productToAdd = products.find((p) => p.name == selectedProduct);
-
-    if (productToAdd) {
-      const formattedDate = formatDate(date);
-
-      setSelectedProducts((prev) => [
-        ...prev,
-        { ...productToAdd, quantity: quantity, date: formattedDate },
-      ]);
-      setSelectedProduct("");
-      setQuantity("");
-      setDate("");
-    }
-  };
-
-  const handleRemove = (name) => {
-    setSelectedProducts((prevProducts) =>
-      prevProducts.filter((p) => p.name !== name)
-    );
+    return `${day}/${month}/${year}`;
   };
 
   return (
@@ -95,7 +47,9 @@ const Sale = () => {
             type="number"
             className="border border-blue-600 px-3 py-2 outline-none border-r-0 h-12 w-60"
             disabled
-            value={selectedProductData?.price ?? ""}
+            value={
+              products.find((p) => p.name === selectedProduct)?.price || ""
+            }
             placeholder="No item selected ..."
           />
 
@@ -121,7 +75,7 @@ const Sale = () => {
 
           <button
             className="bg-blue-600 px-3 py-2 rounded-r-lg text-white h-12 w-60 hover:bg-blue-800 transition-all"
-            onClick={handleAddtoCart}
+            onClick={addProductToCart}
           >
             Add
           </button>
@@ -177,10 +131,10 @@ const Sale = () => {
                           {item.price * item.quantity}
                         </td>
                         <td className="px-4 py-4 text-center">
-                          {item.date || ""}
+                          {formatDate(item.date) || ""}
                         </td>
                         <td className="px-4 py-4 text-center">
-                          <button onClick={() => handleRemove(item.name)}>
+                          <button onClick={() => removeProduct(item.name)}>
                             X
                           </button>
                         </td>
@@ -198,56 +152,75 @@ const Sale = () => {
                   <button className="bg-green-600 rounded-md text-white hover:bg-green-800 transition-all w-20 h-10">
                     Order
                   </button>
-                  <button className="bg-red-600 rounded-md text-white hover:bg-red-800 transition-all w-20 h-10">
+                  <button
+                    className="bg-red-600 rounded-md text-white hover:bg-red-800 transition-all w-20 h-10"
+                    onClick={clearSelectedProducts}
+                  >
                     Cancel
                   </button>
                 </div>
               )}
             </div>
           </div>
-          <div className="w-[30%] mt-5 border border-gray-300 px-2 text-slate-500 rounded-md shadow-md">
-            <h1 className="font-semibold text-center uppercase">
-              Voucher Preview
-            </h1>
 
-            <div className="flex justify-between">
-              <p>Products list</p>
-              <p>Date - {Date.now()}</p>
-            </div>
+          {/* voucher section */}
+          {selectedProducts.length > 0 ? (
+            <div className="w-[30%] mt-5 border border-gray-300 px-2 text-slate-500 rounded-md shadow-md p-4">
+              <h1 className="font-semibold text-center uppercase">
+                Voucher Preview
+              </h1>
 
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Product
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Amt
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Qty
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Price
-                  </th>
-                </tr>
-              </thead>
+              <div className="flex justify-between">
+                <p>Products list</p>
+                <p>Date - {new Date().toLocaleDateString("en-GB")}</p>
+              </div>
 
-              <tbody>
-                {selectedProducts.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                  >
-                    <td className="px-6 py-4">{item.name}</td>
-                    <td className="px-6 py-4">{item.price}</td>
-                    <td className="px-6 py-4">{item.quantity}</td>
-                    <td className="px-6 py-4">{item.price * item.quantity}</td>
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      Product
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Amt
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Qty
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Price
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+
+                <tbody>
+                  {selectedProducts.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                    >
+                      <td className="px-6 py-4">{item.name}</td>
+                      <td className="px-6 py-4">{item.price}</td>
+                      <td className="px-6 py-4">{item.quantity}</td>
+                      <td className="px-6 py-4">
+                        {item.price * item.quantity}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="w-[30%] mt-5 border border-gray-300 px-2 text-slate-500 rounded-md shadow-md p-4">
+              <h1 className="font-semibold text-center uppercase">
+                Voucher Preview
+              </h1>
+
+              <h1 className="font-semibold text-red-600 mt-6">
+                No data for preview!
+              </h1>
+            </div>
+          )}
         </div>
       </div>
     </section>
