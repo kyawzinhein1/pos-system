@@ -1,32 +1,24 @@
 import { create } from "zustand";
+import axios from "axios";
+
+const API_URL = "http://localhost:3000/products";
 
 const useSaleStore = create((set) => ({
     selectedProducts: [],
     selectedProduct: "",
     quantity: "",
     date: "",
-    products: [
-        {
-            name: "Earphone",
-            category: "Accessories",
-            price: 5000,
-        },
-        {
-            name: "Powerbank",
-            category: "Gadget",
-            price: 10000,
-        },
-        {
-            name: "Adapter",
-            category: "Accessories",
-            price: 20000,
-        },
-        {
-            name: "Screen Guard",
-            category: "Accessories",
-            price: 4500,
-        },
-    ],
+    products: [],
+
+    // fetching products
+    fetchProducts: async () => {
+        try {
+            const response = await axios.get(API_URL);
+            set({ products: response.data });
+        } catch (error) {
+            console.error("Error fetching products", error);
+        }
+    },
 
     setSelectedProduct: (product) => set({ selectedProduct: product }),
     setQuantity: (qty) => set({ quantity: qty }),

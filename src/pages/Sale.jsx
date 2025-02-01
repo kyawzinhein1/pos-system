@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import useSaleStore from "../store/sale";
 
 const Sale = () => {
@@ -7,6 +8,7 @@ const Sale = () => {
     quantity,
     date,
     products,
+    fetchProducts,
     setSelectedProduct,
     setQuantity,
     setDate,
@@ -14,6 +16,10 @@ const Sale = () => {
     removeProduct,
     clearSelectedProducts,
   } = useSaleStore();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   // change date format
   const formatDate = (inputDate) => {
@@ -29,13 +35,13 @@ const Sale = () => {
         {/* selection section */}
         <div className="mt-6 flex justify-center">
           <select
-            className="w-3xl border border-blue-600 px-3 py-2 rounded-l-lg outline-none border-r-0 h-12 w-60 cursor-pointer"
+            className="w-3xl border border-gray-400 px-3 py-2 rounded-l-lg outline-none border-r-0 h-12 w-60 cursor-pointer"
             value={selectedProduct}
             onChange={(e) => {
               setSelectedProduct(e.target.value);
             }}
           >
-            <option>Select Products</option>
+            <option hidden>Select Products</option>
             {products.map((product, index) => (
               <option key={index} value={product.name}>
                 {product.name}
@@ -45,7 +51,7 @@ const Sale = () => {
 
           <input
             type="number"
-            className="border border-blue-600 px-3 py-2 outline-none border-r-0 h-12 w-60"
+            className="border border-gray-400 px-3 py-2 outline-none border-r-0 h-12 w-60"
             disabled
             value={
               products.find((p) => p.name === selectedProduct)?.price || ""
@@ -56,7 +62,7 @@ const Sale = () => {
           <input
             type="number"
             placeholder="Enter quantity ..."
-            className="border border-blue-600 px-3 py-2 outline-none border-r-0 h-12 w-60"
+            className="border border-gray-400 px-3 py-2 outline-none border-r-0 h-12 w-60"
             value={quantity === 0 ? "" : quantity}
             onChange={(e) => {
               const value = e.target.value;
@@ -66,7 +72,7 @@ const Sale = () => {
 
           <input
             type="date"
-            className="border border-blue-600 border-r-0 px-3 py-2 outline-none cursor-pointer bg-white appearance-none h-12 w-60"
+            className="border border-gray-400 border-r-0 px-3 py-2 outline-none cursor-pointer bg-white appearance-none h-12 w-60"
             value={date}
             onChange={(e) => {
               setDate(e.target.value);
@@ -89,7 +95,7 @@ const Sale = () => {
                 <table className="w-full border-collapse border border-gray-300">
                   <thead className="bg-gray-100">
                     <tr>
-                      <th scope="col" className="px-4 py-3 text-center">
+                      <th scope="col" className="py-3">
                         Product name
                       </th>
                       <th scope="col" className="px-4 py-3 text-center">
@@ -105,7 +111,7 @@ const Sale = () => {
                         Date
                       </th>
                       <th scope="col" className="px-1 py-3 text-center">
-                        Menu
+                        Actions
                       </th>
                     </tr>
                   </thead>
@@ -119,11 +125,9 @@ const Sale = () => {
 
                     {selectedProducts.map((item, index) => (
                       <tr key={index} className="bg-white border-b">
-                        <td className="px-4 py-4 text-center">{item.name}</td>
-                        <td className="px-4 py-4 text-center">{item.price}</td>
-                        <td className="px-4 py-4 text-center">
-                          {item.quantity}
-                        </td>
+                        <td className="py-4 text-center">{item.name}</td>
+                        <td className="py-4 text-center">{item.price}</td>
+                        <td className="py-4 text-center">{item.quantity}</td>
                         <td className="px-4 py-4 text-center">
                           {item.price * item.quantity}
                         </td>
@@ -135,9 +139,7 @@ const Sale = () => {
                             onClick={() => removeProduct(item.name)}
                             className="text-white bg-red-600 w-5 h-5 rounded-full shadow-md"
                             title="Remove !"
-                          >
-                            -
-                          </button>
+                          ></button>
                         </td>
                       </tr>
                     ))}
