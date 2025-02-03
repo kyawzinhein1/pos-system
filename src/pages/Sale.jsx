@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import useSaleStore from "../store/sale";
+import useProductStore from "../store/product";
 
 const Sale = () => {
   const {
@@ -17,9 +18,16 @@ const Sale = () => {
     clearSelectedProducts,
   } = useSaleStore();
 
+  const { reduceStock } = useProductStore();
+
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const handleOrder = async () => {
+    await reduceStock(selectedProducts);
+    clearSelectedProducts(); // Clear sale items after reducing stock
+  };
 
   // change date format
   const formatDate = (inputDate) => {
@@ -152,7 +160,10 @@ const Sale = () => {
             <div>
               {selectedProducts.length > 0 && (
                 <div className="mt-6 flex justify-end gap-3">
-                  <button className="bg-green-600 rounded-md text-white hover:bg-green-800 transition-all w-20 h-10">
+                  <button
+                    className="bg-green-600 rounded-md text-white hover:bg-green-800 transition-all w-20 h-10"
+                    onClick={handleOrder}
+                  >
                     Order
                   </button>
                   <button
