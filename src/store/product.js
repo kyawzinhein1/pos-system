@@ -44,7 +44,6 @@ const useProductStore = create((set) => ({
     // remove a product
     removeProductFromList: async (id) => {
         try {
-            const response = await axios.delete(`${API_URL}/${id}`);
             set((state) => ({
                 products: state.products.filter((p) => p.id !== id),
             }));

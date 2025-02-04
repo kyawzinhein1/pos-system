@@ -1,4 +1,4 @@
-import { PrinterCheck, PrinterCheckIcon, X } from "lucide-react";
+import { PrinterCheckIcon, X } from "lucide-react";
 
 const Invoice = ({ selectedProducts, onClose }) => {
   // Calculate total price
