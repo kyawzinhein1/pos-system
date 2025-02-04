@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useProductStore from "../store/product";
+import { PlusCircleIcon, Edit2Icon, TrashIcon, Save } from "lucide-react";
 
 const Products = () => {
   const {
@@ -61,8 +62,8 @@ const Products = () => {
   };
 
   return (
-    <section className="container mx-auto mt-10">
-      <h1 className="text-2xl font-semibold mb-4">Products Management</h1>
+    <section className="container mx-auto mt-6">
+      <h1 className="text-2xl font-bold mb-4">Product Management</h1>
 
       {/* Add Product Form */}
       <div className="flex gap-4 mb-6 justify-center">
@@ -95,10 +96,12 @@ const Products = () => {
           onChange={(e) => setStock(e.target.value)}
         />
         <button
-          className="bg-blue-600 px-4 py-2 text-white rounded-md hover:bg-blue-800 transition-all"
+          className="bg-blue-500 px-4 py-2 text-white rounded-md hover:bg-blue-600 transition-all"
           onClick={handleAddProduct}
         >
-          Add Product
+          <div className="flex gap-2">
+            <PlusCircleIcon /> <span>Add Product</span>
+          </div>
         </button>
       </div>
 
@@ -122,7 +125,10 @@ const Products = () => {
                     type="text"
                     value={editedProduct.name}
                     onChange={(e) =>
-                      setEditedProduct({ ...editedProduct, name: e.target.value })
+                      setEditedProduct({
+                        ...editedProduct,
+                        name: e.target.value,
+                      })
                     }
                     autoFocus
                     className="focus:ring-2 focus:ring-blue-500 outline-none rounded-sm border border-blue-500 ps-1"
@@ -185,27 +191,27 @@ const Products = () => {
               <td className="px-4 py-2">
                 {editingId === product.id ? (
                   <button
-                    className="bg-green-600 px-3 py-1 text-white rounded-md hover:bg-green-800"
+                    className="bg-green-500 px-3 py-1 text-white rounded-md hover:bg-green-600"
                     onClick={() => handleEditProduct(product.id)}
                   >
-                    Save
+                    <Save className="w-5" />
                   </button>
                 ) : (
                   <>
                     <button
-                      className="bg-yellow-500 px-3 py-1 text-white rounded-md hover:bg-yellow-700 mr-2"
+                      className="bg-yellow-500 px-3 py-1 text-white rounded-md hover:bg-yellow-600 mr-2 transition-colors"
                       onClick={() => {
                         setEditingId(product.id);
                         setEditedProduct(product);
                       }}
                     >
-                      Edit
+                      <Edit2Icon className="w-4" />
                     </button>
                     <button
-                      className="bg-red-600 px-3 py-1 text-white rounded-md hover:bg-red-800"
+                      className="bg-red-500 px-3 py-1 text-white rounded-md hover:bg-red-600 transition-colors"
                       onClick={() => removeProductFromList(product.id)}
                     >
-                      Remove
+                      <TrashIcon className="w-5" />
                     </button>
                   </>
                 )}

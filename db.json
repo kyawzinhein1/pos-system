@@ -5,14 +5,14 @@
       "name": "Solar Bulb",
       "category": "Electronic",
       "price": 20000,
-      "stock": 45
+      "stock": 40
     },
     {
       "id": "31e7",
       "name": "Extension Cable",
       "category": "Gadgets",
       "price": 12000,
-      "stock": 25
+      "stock": 15
     },
     {
       "id": "37dd",

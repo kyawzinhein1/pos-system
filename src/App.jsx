@@ -27,7 +27,7 @@ const App = () => {
           element: <Sale />,
         },
         {
-          path: "products",
+          path: "manage-products",
           element: <Products />,
         },
       ],

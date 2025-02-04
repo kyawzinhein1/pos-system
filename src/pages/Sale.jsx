@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useSaleStore from "../store/sale";
 import useProductStore from "../store/product";
 import Invoice from "../components/Invoice";
+import { LucideShoppingCart, X } from "lucide-react";
 
 const Sale = () => {
   const {
@@ -41,8 +42,8 @@ const Sale = () => {
   };
 
   return (
-    <section className="container mx-auto mt-10">
-      <h1 className="text-2xl font-semibold mb-4">Sale</h1>
+    <section className="container mx-auto mt-6">
+      <h1 className="text-2xl font-bold mb-4">Sale</h1>
       <div>
         {/* selection section */}
         <div className="flex gap-4 justify-center">
@@ -92,10 +93,12 @@ const Sale = () => {
           />
 
           <button
-            className="bg-blue-600 px-4 py-2 rounded-lg text-white hover:bg-blue-800 transition-all"
+            className="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-600 transition-all"
             onClick={addProductToCart}
           >
-            Add
+            <div className="flex gap-2">
+              <LucideShoppingCart /> <span>Add to Cart</span>
+            </div>
           </button>
         </div>
 
@@ -131,7 +134,9 @@ const Sale = () => {
                   <tbody>
                     {selectedProducts.length < 1 && (
                       <tr className="font-semibold text-red-600 mt-6">
-                        <td>No product is added! Please add a product.</td>
+                        <td className="ps-14">
+                          No product is added! Please add a product.
+                        </td>
                       </tr>
                     )}
 
@@ -149,9 +154,10 @@ const Sale = () => {
                         <td className="px-4 py-4 text-center">
                           <button
                             onClick={() => removeProduct(item.name)}
-                            className="text-white bg-red-600 w-5 h-5 rounded-full shadow-md"
-                            title="Remove !"
-                          ></button>
+                            className="bg-red-500 p-1 text-white rounded-md hover:bg-red-600 transition-colors"
+                          >
+                            <X />
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -165,16 +171,22 @@ const Sale = () => {
               {selectedProducts.length > 0 && (
                 <div className="mt-6 flex justify-end gap-3">
                   <button
-                    className="bg-green-600 rounded-md text-white hover:bg-green-800 transition-all w-20 h-10"
+                    className="bg-green-500 rounded-md text-white hover:bg-green-600 transition-all w-20 h-10"
                     onClick={handleOrder}
                   >
-                    Order
+                    <div className="flex gap-2 ps-2">
+                      <LucideShoppingCart />
+                      <span>Sell</span>
+                    </div>
                   </button>
                   <button
-                    className="bg-red-600 rounded-md text-white hover:bg-red-800 transition-all w-20 h-10"
+                    className="bg-red-500 rounded-md text-white hover:bg-red-600 transition-all w-20 h-10"
                     onClick={clearSelectedProducts}
                   >
-                    Cancel
+                    <div className="flex p-2">
+                      <X />
+                      <span>Cancel</span>
+                    </div>
                   </button>
                 </div>
               )}

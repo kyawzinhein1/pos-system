@@ -1,3 +1,5 @@
+import { PrinterCheck, PrinterCheckIcon, X } from "lucide-react";
+
 const Invoice = ({ selectedProducts, onClose }) => {
   // Calculate total price
   const totalPrice = selectedProducts.reduce(
@@ -16,17 +18,16 @@ const Invoice = ({ selectedProducts, onClose }) => {
             <p>Date - {new Date().toLocaleDateString("en-GB")}</p>
             <p>
               Time -{" "}
-              {new Date()
-                .toLocaleTimeString("en-GB", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                })}
+              {new Date().toLocaleTimeString("en-GB", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })}
             </p>
           </div>
         </div>
 
-        <table className="w-full border-collapse border border-gray-300">
+        <table className="w-full border-collapse border border-gray-300 mt-2">
           <thead className="bg-gray-100">
             <tr>
               <th className="border px-2 py-1">Product</th>
@@ -58,13 +59,13 @@ const Invoice = ({ selectedProducts, onClose }) => {
 
         <div className="mt-4 flex justify-between">
           <button
-            className="bg-red-500 text-white px-4 py-2 rounded-md"
+            className="bg-red-500 hover:bg-red-600 transition-colors text-white px-4 py-2 rounded-md"
             onClick={onClose}
           >
-            Close
+            <X />
           </button>
-          <button className="bg-green-500 text-white px-4 py-2 rounded-md">
-            Print Invoice
+          <button className="bg-green-500 hover:bg-green-600 transition-colors text-white px-4 py-2 rounded-md">
+            <PrinterCheckIcon />
           </button>
         </div>
       </div>
