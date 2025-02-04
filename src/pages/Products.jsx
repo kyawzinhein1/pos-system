@@ -65,7 +65,7 @@ const Products = () => {
       <h1 className="text-2xl font-semibold mb-4">Products Management</h1>
 
       {/* Add Product Form */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-6 justify-center">
         <input
           type="text"
           placeholder="Product Name"
@@ -122,8 +122,9 @@ const Products = () => {
                     type="text"
                     value={editedProduct.name}
                     onChange={(e) =>
-                      setEditedProduct({ ...editProduct, name: e.target.value })
+                      setEditedProduct({ ...editedProduct, name: e.target.value })
                     }
+                    autoFocus
                     className="focus:ring-2 focus:ring-blue-500 outline-none rounded-sm border border-blue-500 ps-1"
                   />
                 ) : (
@@ -141,7 +142,6 @@ const Products = () => {
                         category: e.target.value,
                       })
                     }
-                    autoFocus
                     className="focus:ring-2 focus:ring-blue-500 outline-none rounded-sm border border-blue-500 ps-1"
                   />
                 ) : (

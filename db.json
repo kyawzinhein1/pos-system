@@ -2,24 +2,31 @@
   "products": [
     {
       "id": "afc9",
-      "name": "solar bulb",
-      "category": "electronic",
+      "name": "Solar Bulb",
+      "category": "Electronic",
       "price": 20000,
-      "stock": 5
+      "stock": 45
     },
     {
       "id": "31e7",
-      "name": "extension cable",
-      "category": "gadgets",
+      "name": "Extension Cable",
+      "category": "Gadgets",
       "price": 12000,
-      "stock": 30
+      "stock": 25
     },
     {
       "id": "37dd",
       "name": "Battery",
-      "category": "power",
+      "category": "Power",
       "price": 300000,
-      "stock": 40
+      "stock": 13
+    },
+    {
+      "id": "a040",
+      "name": "Power Station 50000 W",
+      "category": "electronic",
+      "price": 350000,
+      "stock": 14
     }
   ]
 }

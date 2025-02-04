@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useSaleStore from "../store/sale";
 import useProductStore from "../store/product";
+import Invoice from "../components/Invoice";
 
 const Sale = () => {
   const {
@@ -20,13 +21,16 @@ const Sale = () => {
 
   const { reduceStock } = useProductStore();
 
+  // for showing pop up invoice
+  const [showInvoice, setShowInvoice] = useState(false);
+
   useEffect(() => {
     fetchProducts();
   }, []);
 
   const handleOrder = async () => {
     await reduceStock(selectedProducts);
-    clearSelectedProducts(); // Clear sale items after reducing stock
+    setShowInvoice(true);
   };
 
   // change date format
@@ -41,9 +45,9 @@ const Sale = () => {
       <h1 className="text-2xl font-semibold mb-4">Sale</h1>
       <div>
         {/* selection section */}
-        <div className="mt-6 flex justify-center">
+        <div className="flex gap-4 justify-center">
           <select
-            className="w-3xl border border-gray-400 px-3 py-2 rounded-l-lg outline-none border-r-0 h-12 w-60 cursor-pointer"
+            className="border border-gray-400 px-3 py-2 rounded-lg cursor-pointer w-60"
             value={selectedProduct}
             onChange={(e) => {
               setSelectedProduct(e.target.value);
@@ -59,7 +63,7 @@ const Sale = () => {
 
           <input
             type="number"
-            className="border border-gray-400 px-3 py-2 outline-none border-r-0 h-12 w-60"
+            className="border border-gray-400 px-4 py-2 rounded-md w-60"
             disabled
             value={
               products.find((p) => p.name === selectedProduct)?.price || ""
@@ -70,7 +74,7 @@ const Sale = () => {
           <input
             type="number"
             placeholder="Enter quantity ..."
-            className="border border-gray-400 px-3 py-2 outline-none border-r-0 h-12 w-60"
+            className="border border-gray-400 px-4 py-2 rounded-md w-60"
             value={quantity === 0 ? "" : quantity}
             onChange={(e) => {
               const value = e.target.value;
@@ -80,7 +84,7 @@ const Sale = () => {
 
           <input
             type="date"
-            className="border border-gray-400 border-r-0 px-3 py-2 outline-none cursor-pointer bg-white appearance-none h-12 w-60"
+            className="border border-gray-400 px-4 py-2 rounded-md w-60"
             value={date}
             onChange={(e) => {
               setDate(e.target.value);
@@ -88,7 +92,7 @@ const Sale = () => {
           />
 
           <button
-            className="bg-blue-600 px-3 py-2 rounded-r-lg text-white h-12 w-60 hover:bg-blue-800 transition-all"
+            className="bg-blue-600 px-4 py-2 rounded-lg text-white hover:bg-blue-800 transition-all"
             onClick={addProductToCart}
           >
             Add
@@ -96,7 +100,7 @@ const Sale = () => {
         </div>
 
         <div className="flex justify-between gap-6">
-          <div className="w-[70%]">
+          <div className="w-[100%]">
             {/* products show after selected */}
             <div className="mt-5">
               <div>
@@ -176,64 +180,19 @@ const Sale = () => {
               )}
             </div>
           </div>
-
-          {/* voucher section */}
-          {selectedProducts.length > 0 ? (
-            <div className="w-[30%] mt-5 border border-gray-300 px-2 text-slate-500 rounded-md shadow-md p-4">
-              <h1 className="font-semibold text-center uppercase">
-                Voucher Preview
-              </h1>
-
-              <div className="flex justify-between">
-                <p>Products list</p>
-                <p>Date - {new Date().toLocaleDateString("en-GB")}</p>
-              </div>
-
-              <table>
-                <thead>
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      Product
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Amt
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Qty
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Price
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {selectedProducts.map((item, index) => (
-                    <tr key={index} className="bg-white border-b">
-                      <td className="px-6 py-4">{item.name}</td>
-                      <td className="px-6 py-4">{item.price}</td>
-                      <td className="px-6 py-4">{item.quantity}</td>
-                      <td className="px-6 py-4">
-                        {item.price * item.quantity}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="w-[30%] mt-5 border border-gray-300 px-2 text-slate-500 rounded-md shadow-md p-4">
-              <h1 className="font-semibold text-center uppercase">
-                Voucher Preview
-              </h1>
-
-              <h1 className="font-semibold text-red-600 mt-6">
-                No data for preview!
-              </h1>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* pop up invoice section */}
+      {showInvoice && (
+        <Invoice
+          selectedProducts={selectedProducts}
+          onClose={() => {
+            setShowInvoice(false);
+            clearSelectedProducts("");
+          }}
+        />
+      )}
     </section>
   );
 };
