@@ -1,6 +1,7 @@
 import { PrinterCheckIcon, X } from "lucide-react";
 
-const Invoice = ({ selectedProducts, onClose, onSave }) => {
+const Invoice = ({ selectedProducts, trxnId, onClose, onSave }) => {
+
   // Calculate total price
   const totalPrice = selectedProducts.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -13,7 +14,7 @@ const Invoice = ({ selectedProducts, onClose, onSave }) => {
         <h2 className="text-xl font-semibold mb-4 text-center">Payment Info</h2>
 
         <div className="flex justify-between">
-          <p>Casher - Ano_1</p>
+          <p>ID - {trxnId}</p>
           <div>
             <p>Date - {new Date().toLocaleDateString("en-GB")}</p>
             <p>

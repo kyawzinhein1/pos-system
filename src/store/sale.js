@@ -26,7 +26,7 @@ const useSaleStore = create((set) => ({
 
     addProductToCart: () =>
         set((state) => {
-            if (!state.selectedProduct || !state.quantity || !state.date) {
+            if (!state.selectedProduct || !state.quantity) {
                 alert("Please fill all fields.");
                 return state;
             }

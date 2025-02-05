@@ -27,6 +27,7 @@ const Sale = () => {
 
   // for showing pop up invoice
   const [showInvoice, setShowInvoice] = useState(false);
+  const [trxnId, setTrxnId] = useState(null);
 
   useEffect(() => {
     fetchProducts();
@@ -37,20 +38,11 @@ const Sale = () => {
     const today = new Date();
     const formattedDate = today.toLocaleDateString("en-GB").split("/").join("");
 
-    // Fetch transactions to get the last ID (assuming transactions are stored in Zustand or JSON Server)
-    const previousTransactions = useTransactionStore.getState().transactions;
-
-    // Extract the last transaction ID (if exists)
-    let lastTransaction = previousTransactions.length
-      ? previousTransactions[previousTransactions.length - 1].id
-      : `${formattedDate}-000`; // Default first ID
-
-    // Extract the numeric part and increment it
-    let lastNumber = parseInt(lastTransaction.split("-")[3], 10) || 0;
-    let newNumber = String(lastNumber + 1).padStart(3, "0"); // Ensure 6 digits
+    // Generate a unique 5-digit ID
+    const uniqueId = Math.floor(10000 + Math.random() * 90000); // Ensures 5 digits
 
     // Generate new transaction ID
-    const transactionId = `${formattedDate}${newNumber}`;
+    const transactionId = `${formattedDate}${uniqueId}`;
 
     // transaction object
     const transactionDetail = {
@@ -69,9 +61,10 @@ const Sale = () => {
     };
 
     // check stock for showing invoice
-    if (selectedProducts[0].stock > selectedProducts[0].quantity) {
+    if (selectedProducts[0].stock >= selectedProducts[0].quantity) {
       await reduceStock(selectedProducts);
       await saveTransaction(transactionDetail);
+      setTrxnId(transactionId);
       setShowInvoice(true);
     } else {
       alert("Availale stock is lower than you need.");
@@ -83,6 +76,15 @@ const Sale = () => {
     if (!inputDate) return "";
     const [year, month, day] = inputDate.split("-");
     return `${day}/${month}/${year}`;
+  };
+
+  // today as default value
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Ensure two digits
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`; // Format as YYYY-MM-DD for the date input
   };
 
   return (
@@ -130,7 +132,7 @@ const Sale = () => {
           <input
             type="date"
             className="border border-gray-400 px-4 py-2 rounded-md w-60"
-            value={date}
+            value={date || getTodayDate()}
             onChange={(e) => {
               setDate(e.target.value);
             }}
@@ -151,79 +153,91 @@ const Sale = () => {
             {/* products show after selected */}
             <div className="mt-5">
               <div>
-                <table className="w-full border-collapse border border-gray-300">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th scope="col" className="py-3">
-                        Product name
-                      </th>
-                      <th scope="col" className="px-4 py-3 text-center">
-                        Sale Price
-                      </th>
-                      <th scope="col" className="px-4 py-3 text-center">
-                        Quantity
-                      </th>
-                      <th scope="col" className="px-4 py-3 text-center">
-                        Price
-                      </th>
-                      <th scope="col" className="px-4 py-3 text-center">
-                        Date
-                      </th>
-                      <th scope="col" className="px-4 py-3 text-center">
-                        Stock
-                      </th>
-                      <th scope="col" className="px-1 py-3 text-center">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {selectedProducts.length < 1 && (
-                      <tr className="font-semibold text-red-600 mt-6">
-                        <td className="ps-14">
-                          No product is added! Please add a product.
-                        </td>
+                <div className="max-h-[388px] overflow-y-auto border border-gray-300 rounded-lg">
+                  <table className="w-full border-collapse">
+                    <thead className="bg-gray-100 sticky top-0">
+                      <tr>
+                        <th scope="col" className="px-3 py-3">
+                          No
+                        </th>
+                        <th scope="col" className="py-3">
+                          Product name
+                        </th>
+                        <th scope="col" className="px-4 py-3 text-center">
+                          Sale Price
+                        </th>
+                        <th scope="col" className="px-4 py-3 text-center">
+                          Quantity
+                        </th>
+                        <th scope="col" className="px-4 py-3 text-center">
+                          Price
+                        </th>
+                        <th scope="col" className="px-4 py-3 text-center">
+                          Date
+                        </th>
+                        <th scope="col" className="px-4 py-3 text-center">
+                          Stock
+                        </th>
+                        <th scope="col" className="px-1 py-3 text-center">
+                          Actions
+                        </th>
                       </tr>
-                    )}
+                    </thead>
 
-                    {selectedProducts.map((item, index) => (
-                      <tr key={index} className="bg-white border-b">
-                        <td className="py-4 text-center">{item.name}</td>
-                        <td className="py-4 text-center">{item.price}</td>
-                        <td className="py-4 text-center">{item.quantity}</td>
-                        <td className="px-4 py-4 text-center">
-                          {item.price * item.quantity}
-                        </td>
-                        <td className="px-4 py-4 text-center">
-                          {formatDate(item.date) || ""}
-                        </td>
-                        <td
-                          className={`px-4 py-4 text-center font-semibold ${
-                            item.stock <= 10 ? "text-red-500" : "text-green-500"
-                          }`}
-                        >
-                          {item.stock}
-                        </td>
-                        <td className="px-4 py-4 text-center">
-                          <button
-                            onClick={() => removeProduct(item.name)}
-                            className="bg-red-500 p-1 text-white rounded-md hover:bg-red-600 transition-colors"
+                    <tbody>
+                      {selectedProducts.length < 1 && (
+                        <tr className="font-semibold text-red-600 mt-6">
+                          <td
+                            colSpan={8}
+                            className="text-center text-red-600 py-4"
                           >
-                            <X />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                            No product is added! Please add a product.
+                          </td>
+                        </tr>
+                      )}
+
+                      {selectedProducts.map((item, index) => (
+                        <tr key={index} className="bg-white border-b">
+                          <td className="py-4 text-center">{index + 1}</td>
+                          <td className="py-4 text-center">{item.name}</td>
+                          <td className="py-4 text-center">{item.price}</td>
+                          <td className="py-4 text-center">{item.quantity}</td>
+                          <td className="px-4 py-4 text-center">
+                            {item.price * item.quantity}
+                          </td>
+                          <td className="px-4 py-4 text-center">
+                            {formatDate(item.date) ||
+                              formatDate(getTodayDate())}
+                          </td>
+                          <td
+                            className={`px-4 py-4 text-center font-semibold ${
+                              item.stock <= 10
+                                ? "text-red-500"
+                                : "text-green-500"
+                            }`}
+                          >
+                            {item.stock}
+                          </td>
+                          <td className="px-4 py-4 text-center">
+                            <button
+                              onClick={() => removeProduct(item.name)}
+                              className="bg-red-500 p-1 text-white rounded-md hover:bg-red-600 transition-colors"
+                            >
+                              <X />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
 
             {/* button section */}
             <div>
               {selectedProducts.length > 0 && (
-                <div className="mt-6 flex justify-end gap-3">
+                <div className="mt-3 flex justify-end gap-3">
                   <button
                     className="bg-green-500 rounded-md text-white hover:bg-green-600 transition-all w-20 h-10"
                     onClick={handleOrder}
@@ -253,6 +267,7 @@ const Sale = () => {
       {showInvoice && (
         <Invoice
           selectedProducts={selectedProducts}
+          trxnId={trxnId}
           onClose={() => {
             setShowInvoice(false);
             clearSelectedProducts("");
