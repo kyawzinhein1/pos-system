@@ -1,6 +1,6 @@
 import { PrinterCheckIcon, X } from "lucide-react";
 
-const Invoice = ({ selectedProducts, onClose }) => {
+const Invoice = ({ selectedProducts, onClose, onSave }) => {
   // Calculate total price
   const totalPrice = selectedProducts.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -64,7 +64,10 @@ const Invoice = ({ selectedProducts, onClose }) => {
           >
             <X />
           </button>
-          <button className="bg-green-500 hover:bg-green-600 transition-colors text-white px-4 py-2 rounded-md">
+          <button
+            className="bg-green-500 hover:bg-green-600 transition-colors text-white px-4 py-2 rounded-md"
+            onClick={onSave}
+          >
             <PrinterCheckIcon />
           </button>
         </div>

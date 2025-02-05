@@ -5,28 +5,36 @@
       "name": "Solar Bulb",
       "category": "Electronic",
       "price": 20000,
-      "stock": 40
+      "stock": 33
     },
     {
       "id": "31e7",
       "name": "Extension Cable",
       "category": "Gadgets",
       "price": 12000,
-      "stock": 15
+      "stock": 7
     },
     {
       "id": "37dd",
       "name": "Battery",
       "category": "Power",
       "price": 300000,
-      "stock": 13
+      "stock": 4
     },
     {
       "id": "a040",
       "name": "Power Station 50000 W",
       "category": "electronic",
       "price": 350000,
-      "stock": 14
+      "stock": 13
+    },
+    {
+      "id": "3bc2",
+      "name": "demo",
+      "category": "demo testing",
+      "price": 200,
+      "stock": 10
     }
-  ]
+  ],
+  "transactions": []
 }

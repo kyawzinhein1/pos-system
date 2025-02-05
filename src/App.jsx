@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import Sale from "./pages/Sale";
 import Products from "./pages/Products";
 import Error from "./components/Error";
+import Transactions from "./pages/Transaction";
+import Profile from "./pages/Profile";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -26,8 +28,16 @@ const App = () => {
           element: <Sale />,
         },
         {
-          path: "manage-products",
+          path: "/manage-products",
           element: <Products />,
+        },
+        {
+          path: "transactions",
+          element: <Transactions />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
         },
       ],
     },

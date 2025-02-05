@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useSaleStore from "../store/sale";
 import useProductStore from "../store/product";
+import useTransactionStore from "../store/transactions";
 import Invoice from "../components/Invoice";
 import { LucideShoppingCart, X } from "lucide-react";
 
@@ -22,6 +23,8 @@ const Sale = () => {
 
   const { reduceStock } = useProductStore();
 
+  const { saveTransaction } = useTransactionStore();
+
   // for showing pop up invoice
   const [showInvoice, setShowInvoice] = useState(false);
 
@@ -30,8 +33,49 @@ const Sale = () => {
   }, []);
 
   const handleOrder = async () => {
-    await reduceStock(selectedProducts);
-    setShowInvoice(true);
+    // Get today's date in dd-mm-yyyy format
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString("en-GB").split("/").join("");
+
+    // Fetch transactions to get the last ID (assuming transactions are stored in Zustand or JSON Server)
+    const previousTransactions = useTransactionStore.getState().transactions;
+
+    // Extract the last transaction ID (if exists)
+    let lastTransaction = previousTransactions.length
+      ? previousTransactions[previousTransactions.length - 1].id
+      : `${formattedDate}-000`; // Default first ID
+
+    // Extract the numeric part and increment it
+    let lastNumber = parseInt(lastTransaction.split("-")[3], 10) || 0;
+    let newNumber = String(lastNumber + 1).padStart(3, "0"); // Ensure 6 digits
+
+    // Generate new transaction ID
+    const transactionId = `${formattedDate}${newNumber}`;
+
+    // transaction object
+    const transactionDetail = {
+      id: transactionId, // Unique order ID
+      products: selectedProducts,
+      total: selectedProducts.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      ),
+      date: new Date().toLocaleDateString("en-GB"),
+      time: new Date().toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+    };
+
+    // check stock for showing invoice
+    if (selectedProducts[0].stock > selectedProducts[0].quantity) {
+      await reduceStock(selectedProducts);
+      await saveTransaction(transactionDetail);
+      setShowInvoice(true);
+    } else {
+      alert("Availale stock is lower than you need.");
+    }
   };
 
   // change date format
@@ -125,6 +169,9 @@ const Sale = () => {
                       <th scope="col" className="px-4 py-3 text-center">
                         Date
                       </th>
+                      <th scope="col" className="px-4 py-3 text-center">
+                        Stock
+                      </th>
                       <th scope="col" className="px-1 py-3 text-center">
                         Actions
                       </th>
@@ -150,6 +197,13 @@ const Sale = () => {
                         </td>
                         <td className="px-4 py-4 text-center">
                           {formatDate(item.date) || ""}
+                        </td>
+                        <td
+                          className={`px-4 py-4 text-center font-semibold ${
+                            item.stock <= 10 ? "text-red-500" : "text-green-500"
+                          }`}
+                        >
+                          {item.stock}
                         </td>
                         <td className="px-4 py-4 text-center">
                           <button
@@ -202,6 +256,9 @@ const Sale = () => {
           onClose={() => {
             setShowInvoice(false);
             clearSelectedProducts("");
+          }}
+          onSave={() => {
+            saveTransaction();
           }}
         />
       )}
