@@ -5,7 +5,7 @@
       "name": "Solar Bulb",
       "category": "Electronic",
       "price": 20000,
-      "stock": 23
+      "stock": 21
     },
     {
       "id": "31e7",
@@ -19,21 +19,21 @@
       "name": "Battery",
       "category": "Power",
       "price": 300000,
-      "stock": 16
+      "stock": 14
     },
     {
       "id": "a040",
       "name": "Power Station 50000 W",
       "category": "electronic",
       "price": 350000,
-      "stock": 11
+      "stock": 10
     },
     {
       "id": "3bc2",
       "name": "demo",
       "category": "demo testing",
       "price": 200,
-      "stock": 73
+      "stock": 71
     }
   ],
   "transactions": [
@@ -275,6 +275,74 @@
       "total": 300000,
       "date": "06/02/2025",
       "time": "11:15:39"
+    },
+    {
+      "id": "0602202518531",
+      "products": [
+        {
+          "id": "afc9",
+          "name": "Solar Bulb",
+          "category": "Electronic",
+          "price": 20000,
+          "stock": 22,
+          "quantity": 1,
+          "date": ""
+        }
+      ],
+      "total": 20000,
+      "date": "06/02/2025",
+      "time": "15:11:13"
+    },
+    {
+      "id": "0602202565852",
+      "products": [
+        {
+          "id": "37dd",
+          "name": "Battery",
+          "category": "Power",
+          "price": 300000,
+          "stock": 16,
+          "quantity": 2,
+          "date": ""
+        }
+      ],
+      "total": 600000,
+      "date": "06/02/2025",
+      "time": "15:53:38"
+    },
+    {
+      "id": "0602202541115",
+      "products": [
+        {
+          "id": "3bc2",
+          "name": "demo",
+          "category": "demo testing",
+          "price": 200,
+          "stock": 73,
+          "quantity": 1,
+          "date": ""
+        }
+      ],
+      "total": 200,
+      "date": "06/02/2025",
+      "time": "15:55:43"
+    },
+    {
+      "id": "0602202543581",
+      "products": [
+        {
+          "id": "3bc2",
+          "name": "demo",
+          "category": "demo testing",
+          "price": 200,
+          "stock": 72,
+          "quantity": 1,
+          "date": ""
+        }
+      ],
+      "total": 200,
+      "date": "06/02/2025",
+      "time": "15:55:55"
     }
   ]
 }

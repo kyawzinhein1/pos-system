@@ -55,12 +55,12 @@ const Dashboard = () => {
       </div>
 
       {/* Statistics Overview */}
-      <div className="grid grid-cols-3 gap-6">
-        <div className="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
+      <div className="flex gap-8">
+        <div className="bg-blue-500 text-white p-6 rounded-lg shadow-lg w-48 h-24">
           <h2 className="text-lg font-semibold">Total Products</h2>
           <p className="text-2xl">{products.length}</p>
         </div>
-        <div className="bg-green-500 text-white p-6 rounded-lg shadow-lg">
+        <div className="bg-green-500 text-white p-6 rounded-lg shadow-lg w-56 h-24">
           <h2 className="text-lg font-semibold">Total Transactions</h2>
           <p className="text-2xl">{transactions.length}</p>
         </div>
@@ -74,7 +74,7 @@ const Dashboard = () => {
             All products are sufficiently stocked.
           </p>
         ) : (
-          <table className="w-full border-collapse border border-gray-300">
+          <table className="border-collapse border border-red-100 rounded-md overflow-hidden">
             <thead className="bg-red-100">
               <tr>
                 <th className="border px-4 py-2">Product</th>
