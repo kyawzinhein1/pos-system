@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useProductStore from "../store/product";
 import { PlusCircleIcon, Edit2Icon, TrashIcon, Save } from "lucide-react";
+import BackBtn from "../components/BackBtn";
 
 const Products = () => {
   const {
@@ -62,8 +63,11 @@ const Products = () => {
   };
 
   return (
-    <section className="container mx-auto mt-6">
-      <h1 className="text-2xl font-bold mb-4">Product Management</h1>
+    <section className="container mx-auto mt-4">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold mb-6">Product Management</h1>
+        <BackBtn />
+      </div>
 
       {/* Add Product Form */}
       <div className="flex gap-4 mb-6 justify-center">
@@ -236,27 +240,27 @@ const Products = () => {
                 <td className="px-4 py-2">
                   {editingId === product.id ? (
                     <button
-                      className="bg-green-500 px-3 py-1 text-white rounded-md hover:bg-green-600"
+                      className="bg-green-500 p-2 text-white rounded-full hover:bg-green-600"
                       onClick={() => handleEditProduct(product.id)}
                     >
-                      <Save className="w-5" />
+                      <Save className="w-4 h-4" />
                     </button>
                   ) : (
                     <>
                       <button
-                        className="bg-yellow-500 px-3 py-1 text-white rounded-md hover:bg-yellow-600 mr-2 transition-colors"
+                        className="bg-yellow-500 p-2 rounded-full text-white hover:bg-yellow-600 mr-2 transition-colors"
                         onClick={() => {
                           setEditingId(product.id);
                           setEditedProduct(product);
                         }}
                       >
-                        <Edit2Icon className="w-4" />
+                        <Edit2Icon className="w-4 h-4" />
                       </button>
                       <button
-                        className="bg-red-500 px-3 py-1 text-white rounded-md hover:bg-red-600 transition-colors"
+                        className="bg-red-500 p-2 text-white rounded-full hover:bg-red-600 transition-colors"
                         onClick={() => removeProductFromList(product.id)}
                       >
-                        <TrashIcon className="w-5" />
+                        <TrashIcon className="w-4 h-4" />
                       </button>
                     </>
                   )}

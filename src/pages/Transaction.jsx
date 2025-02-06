@@ -1,27 +1,23 @@
 import { useEffect, useState } from "react";
 import useTransactionStore from "../store/transactions";
+import BackBtn from "../components/BackBtn";
 
 const Transactions = () => {
   const { transactions, fetchTransactions } = useTransactionStore();
-
-  const [number, setNumber] = useState(1);
-
-  const tranId = (number) => {
-    if (number >= 1) {
-      number++;
-    }
-  };
 
   useEffect(() => {
     fetchTransactions();
   }, []);
 
   return (
-    <section className="container mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4">Transactions</h1>
-      <div className="max-h-[388px] overflow-y-auto border border-gray-300 rounded-lg">
+    <section className="container mx-auto mt-4">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold mb-8">Transactions</h1>
+        <BackBtn />
+      </div>
+      <div className="max-h-[460px] overflow-y-auto border border-gray-300 rounded-lg">
         <table className="w-full border-collapse border border-gray-300">
-          <thead className="bg-gray-100">
+          <thead className="bg-gray-100 sticky top-0">
             <tr>
               <th className="border py-2">No</th>
               <th className="border py-2">Transaction ID</th>
@@ -62,5 +58,3 @@ const Transactions = () => {
 };
 
 export default Transactions;
-
-//className="max-h-[388px] overflow-y-auto border border-gray-300 rounded-lg"

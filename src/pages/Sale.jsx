@@ -4,6 +4,8 @@ import useProductStore from "../store/product";
 import useTransactionStore from "../store/transactions";
 import Invoice from "../components/Invoice";
 import { LucideShoppingCart, X } from "lucide-react";
+import Message from "../components/Message";
+import BackBtn from "../components/BackBtn";
 
 const Sale = () => {
   const {
@@ -28,6 +30,7 @@ const Sale = () => {
   // for showing pop up invoice
   const [showInvoice, setShowInvoice] = useState(false);
   const [trxnId, setTrxnId] = useState(null);
+  const [showMsg, setShowMsg] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -67,7 +70,7 @@ const Sale = () => {
       setTrxnId(transactionId);
       setShowInvoice(true);
     } else {
-      alert("Availale stock is lower than you need.");
+      setShowMsg(true);
     }
   };
 
@@ -88,8 +91,11 @@ const Sale = () => {
   };
 
   return (
-    <section className="container mx-auto mt-6">
-      <h1 className="text-2xl font-bold mb-4">Sale</h1>
+    <section className="container mx-auto mt-4">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold mb-8">Sale</h1>
+        <BackBtn />
+      </div>
       <div>
         {/* selection section */}
         <div className="flex gap-4 justify-center">
@@ -129,14 +135,14 @@ const Sale = () => {
             }}
           />
 
-          <input
+          {/* <input
             type="date"
             className="border border-gray-400 px-4 py-2 rounded-md w-60"
             value={date || getTodayDate()}
             onChange={(e) => {
               setDate(e.target.value);
             }}
-          />
+          /> */}
 
           <button
             className="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-600 transition-all"
@@ -173,9 +179,6 @@ const Sale = () => {
                           Price
                         </th>
                         <th scope="col" className="px-4 py-3 text-center">
-                          Date
-                        </th>
-                        <th scope="col" className="px-4 py-3 text-center">
                           Stock
                         </th>
                         <th scope="col" className="px-1 py-3 text-center">
@@ -198,19 +201,19 @@ const Sale = () => {
 
                       {selectedProducts.map((item, index) => (
                         <tr key={index} className="bg-white border-b">
-                          <td className="py-4 text-center">{index + 1}</td>
-                          <td className="py-4 text-center">{item.name}</td>
-                          <td className="py-4 text-center">{item.price}</td>
-                          <td className="py-4 text-center">{item.quantity}</td>
-                          <td className="px-4 py-4 text-center">
+                          <td className="py-2 text-center">{index + 1}</td>
+                          <td className="py-2 text-center">{item.name}</td>
+                          <td className="py-2 text-center">{item.price}</td>
+                          <td className="py-2 text-center">{item.quantity}</td>
+                          <td className="px-4 py-2 text-center">
                             {item.price * item.quantity}
                           </td>
-                          <td className="px-4 py-4 text-center">
+                          {/* <td className="px-4 py-4 text-center">
                             {formatDate(item.date) ||
                               formatDate(getTodayDate())}
-                          </td>
+                          </td> */}
                           <td
-                            className={`px-4 py-4 text-center font-semibold ${
+                            className={`px-4 py-2 text-center font-semibold ${
                               item.stock <= 10
                                 ? "text-red-500"
                                 : "text-green-500"
@@ -218,12 +221,12 @@ const Sale = () => {
                           >
                             {item.stock}
                           </td>
-                          <td className="px-4 py-4 text-center">
+                          <td className="px-4 py-2 text-center">
                             <button
                               onClick={() => removeProduct(item.name)}
-                              className="bg-red-500 p-1 text-white rounded-md hover:bg-red-600 transition-colors"
+                              className="bg-red-500 p-1 text-white rounded-full hover:bg-red-600 transition-colors"
                             >
-                              <X />
+                              <X className="w-4 h-4"/>
                             </button>
                           </td>
                         </tr>
@@ -275,6 +278,16 @@ const Sale = () => {
           onSave={() => {
             saveTransaction();
           }}
+        />
+      )}
+
+      {/* show message */}
+      {showMsg && (
+        <Message
+          closeMsg={() => {
+            setShowMsg(false);
+          }}
+          message="Low stock! Please check again."
         />
       )}
     </section>

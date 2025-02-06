@@ -5,7 +5,7 @@
       "name": "Solar Bulb",
       "category": "Electronic",
       "price": 20000,
-      "stock": 24
+      "stock": 23
     },
     {
       "id": "31e7",
@@ -26,14 +26,14 @@
       "name": "Power Station 50000 W",
       "category": "electronic",
       "price": 350000,
-      "stock": 4
+      "stock": 1
     },
     {
       "id": "3bc2",
       "name": "demo",
       "category": "demo testing",
       "price": 200,
-      "stock": 94
+      "stock": 73
     }
   ],
   "transactions": [
@@ -104,6 +104,160 @@
       "total": 300000,
       "date": "05/02/2025",
       "time": "16:45:41"
+    },
+    {
+      "id": "0602202573111",
+      "products": [
+        {
+          "id": "a040",
+          "name": "Power Station 50000 W",
+          "category": "electronic",
+          "price": 350000,
+          "stock": 5,
+          "quantity": 1,
+          "date": ""
+        }
+      ],
+      "total": 350000,
+      "date": "06/02/2025",
+      "time": "09:59:09"
+    },
+    {
+      "id": "0602202556223",
+      "products": [
+        {
+          "id": "3bc2",
+          "name": "demo",
+          "category": "demo testing",
+          "price": 200,
+          "stock": 94,
+          "quantity": 5,
+          "date": ""
+        }
+      ],
+      "total": 1000,
+      "date": "06/02/2025",
+      "time": "10:02:11"
+    },
+    {
+      "id": "0602202578175",
+      "products": [
+        {
+          "id": "3bc2",
+          "name": "demo",
+          "category": "demo testing",
+          "price": 200,
+          "stock": 89,
+          "quantity": 4,
+          "date": ""
+        }
+      ],
+      "total": 800,
+      "date": "06/02/2025",
+      "time": "10:04:08"
+    },
+    {
+      "id": "0602202521977",
+      "products": [
+        {
+          "id": "a040",
+          "name": "Power Station 50000 W",
+          "category": "electronic",
+          "price": 350000,
+          "stock": 4,
+          "quantity": 2,
+          "date": ""
+        }
+      ],
+      "total": 700000,
+      "date": "06/02/2025",
+      "time": "10:54:26"
+    },
+    {
+      "id": "0602202529015",
+      "products": [
+        {
+          "id": "31e7",
+          "name": "Extension Cable",
+          "category": "Gadgets",
+          "price": 12000,
+          "stock": 1,
+          "quantity": 1,
+          "date": ""
+        }
+      ],
+      "total": 12000,
+      "date": "06/02/2025",
+      "time": "10:57:08"
+    },
+    {
+      "id": "0602202556363",
+      "products": [
+        {
+          "id": "3bc2",
+          "name": "demo",
+          "category": "demo testing",
+          "price": 200,
+          "stock": 85,
+          "quantity": 5,
+          "date": ""
+        }
+      ],
+      "total": 1000,
+      "date": "06/02/2025",
+      "time": "10:58:02"
+    },
+    {
+      "id": "0602202524555",
+      "products": [
+        {
+          "id": "3bc2",
+          "name": "demo",
+          "category": "demo testing",
+          "price": 200,
+          "stock": 80,
+          "quantity": 5,
+          "date": ""
+        }
+      ],
+      "total": 1000,
+      "date": "06/02/2025",
+      "time": "10:58:23"
+    },
+    {
+      "id": "0602202587446",
+      "products": [
+        {
+          "id": "a040",
+          "name": "Power Station 50000 W",
+          "category": "electronic",
+          "price": 350000,
+          "stock": 2,
+          "quantity": 1,
+          "date": ""
+        },
+        {
+          "id": "3bc2",
+          "name": "demo",
+          "category": "demo testing",
+          "price": 200,
+          "stock": 75,
+          "quantity": 2,
+          "date": ""
+        },
+        {
+          "id": "afc9",
+          "name": "Solar Bulb",
+          "category": "Electronic",
+          "price": 20000,
+          "stock": 24,
+          "quantity": 1,
+          "date": ""
+        }
+      ],
+      "total": 370400,
+      "date": "06/02/2025",
+      "time": "11:09:29"
     }
   ]
 }

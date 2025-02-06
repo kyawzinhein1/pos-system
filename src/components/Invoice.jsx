@@ -1,7 +1,6 @@
 import { PrinterCheckIcon, X } from "lucide-react";
 
 const Invoice = ({ selectedProducts, trxnId, onClose, onSave }) => {
-
   // Calculate total price
   const totalPrice = selectedProducts.reduce(
     (sum, item) => sum + item.price * item.quantity,
