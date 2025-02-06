@@ -12,21 +12,21 @@
       "name": "Extension Cable",
       "category": "Gadgets",
       "price": 12000,
-      "stock": 0
+      "stock": 20
     },
     {
       "id": "37dd",
       "name": "Battery",
       "category": "Power",
       "price": 300000,
-      "stock": 7
+      "stock": 16
     },
     {
       "id": "a040",
       "name": "Power Station 50000 W",
       "category": "electronic",
       "price": 350000,
-      "stock": 1
+      "stock": 11
     },
     {
       "id": "3bc2",
@@ -51,8 +51,8 @@
         }
       ],
       "total": 200,
-      "date": "05/02/2025",
-      "time": "16:33:50"
+      "date": "04/02/2025",
+      "time": "12:33:50"
     },
     {
       "id": "0502202546367",
@@ -258,6 +258,23 @@
       "total": 370400,
       "date": "06/02/2025",
       "time": "11:09:29"
+    },
+    {
+      "id": "0602202551881",
+      "products": [
+        {
+          "id": "37dd",
+          "name": "Battery",
+          "category": "Power",
+          "price": 300000,
+          "stock": 7,
+          "quantity": 1,
+          "date": ""
+        }
+      ],
+      "total": 300000,
+      "date": "06/02/2025",
+      "time": "11:15:39"
     }
   ]
 }
