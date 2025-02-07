@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import useProductStore from "../store/product";
 import { PlusCircleIcon, Edit2Icon, TrashIcon, Save } from "lucide-react";
 import BackBtn from "../components/BackBtn";
+import ProductForm from "../components/ProductForm";
 
 const Products = () => {
   const {
     products,
     fetchProducts,
     addProduct,
-    editProduct,
     removeProductFromList,
   } = useProductStore();
 
@@ -17,6 +17,9 @@ const Products = () => {
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
   const [editingId, setEditingId] = useState("");
+  const [searchKey, setSearchKey] = useState("");
+  const [showEdit, setShowEdit] = useState(false);
+
   const [editedProduct, setEditedProduct] = useState({
     name: "",
     category: "",
@@ -48,24 +51,42 @@ const Products = () => {
     setStock("");
   };
 
-  const handleEditProduct = async (id) => {
-    if (
-      !editedProduct.name ||
-      !editedProduct.category ||
-      !editedProduct.price ||
-      !editedProduct.stock
-    ) {
-      alert("Please fill all field.");
-      return;
-    }
-    await editProduct(id, editedProduct);
-    setEditingId(null);
-  };
+
+  // const handleEditProduct = async (id) => {
+  //   if (
+  //     !editedProduct.name ||
+  //     !editedProduct.category ||
+  //     !editedProduct.price ||
+  //     !editedProduct.stock
+  //   ) {
+  //     alert("Please fill all field.");
+  //     return;
+  //   }
+  //   await editProduct(id, editedProduct);
+  //   setEditingId(null);
+  // };
+
+  // Filter products based on search key
+  const filteredProducts = products.filter(
+    (product) =>
+      product.name.toLowerCase().includes(searchKey.toLowerCase().trim()) ||
+      product.category.toLowerCase().includes(searchKey.toLowerCase().trim())
+  );
 
   return (
     <section className="container mx-auto mt-4">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-3">
         <h1 className="text-2xl font-bold mb-6">Product Management</h1>
+
+        <input
+          type="text"
+          placeholder="Search products ..."
+          value={searchKey}
+          onChange={(e) => {
+            setSearchKey(e.target.value);
+          }}
+          className="border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
         <BackBtn />
       </div>
 
@@ -123,153 +144,74 @@ const Products = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product, index) => (
+            {filteredProducts.map((product, index) => (
               <tr key={index} className="text-center border border-gray-300">
                 <td
                   className={`px-4 py-4 text-center ${
                     product.stock <= 0 && "text-red-600 font-semibold"
                   }`}
                 >
-                  {editingId === product.id ? (
-                    <input
-                      type="text"
-                      value={editedProduct.name}
-                      onChange={(e) =>
-                        setEditedProduct({
-                          ...editedProduct,
-                          name: e.target.value,
-                        })
-                      }
-                      autoFocus
-                      className="focus:ring-2 focus:ring-blue-500 outline-none rounded-sm border border-blue-500 ps-1"
-                    />
-                  ) : (
-                    index + 1
-                  )}
-                </td>
-
-                <td
-                  className={`px-4 py-4 text-center ${
-                    product.stock <= 0 && "text-red-600 font-semibold"
-                  }`}
-                >
-                  {editingId === product.id ? (
-                    <input
-                      type="text"
-                      value={editedProduct.name}
-                      onChange={(e) =>
-                        setEditedProduct({
-                          ...editedProduct,
-                          name: e.target.value,
-                        })
-                      }
-                      autoFocus
-                      className="focus:ring-2 focus:ring-blue-500 outline-none rounded-sm border border-blue-500 ps-1"
-                    />
-                  ) : (
-                    product.name
-                  )}
+                  {index + 1}
                 </td>
                 <td
                   className={`px-4 py-4 text-center ${
                     product.stock <= 0 && "text-red-600 font-semibold"
                   }`}
                 >
-                  {editingId === product.id ? (
-                    <input
-                      type="text"
-                      value={editedProduct.category}
-                      onChange={(e) =>
-                        setEditedProduct({
-                          ...editedProduct,
-                          category: e.target.value,
-                        })
-                      }
-                      className="focus:ring-2 focus:ring-blue-500 outline-none rounded-sm border border-blue-500 ps-1"
-                    />
-                  ) : (
-                    product.category
-                  )}
+                  {product.name}
                 </td>
                 <td
                   className={`px-4 py-4 text-center ${
                     product.stock <= 0 && "text-red-600 font-semibold"
                   }`}
                 >
-                  {editingId === product.id ? (
-                    <input
-                      type="number"
-                      value={
-                        editedProduct.price === 0 ? "" : editedProduct.price
-                      }
-                      onChange={(e) =>
-                        setEditedProduct({
-                          ...editedProduct,
-                          price: Number(e.target.value),
-                        })
-                      }
-                      className="focus:ring-2 focus:ring-blue-500 outline-none rounded-sm border border-blue-500 ps-1"
-                    />
-                  ) : (
-                    product.price
-                  )}
+                  {product.category}
+                </td>
+                <td
+                  className={`px-4 py-4 text-center ${
+                    product.stock <= 0 && "text-red-600 font-semibold"
+                  }`}
+                >
+                  {product.price}
                 </td>
                 <td
                   className={`px-4 py-4 text-center font-semibold ${
                     product.stock <= 10 ? "text-red-600" : "text-green-600"
                   }`}
                 >
-                  {editingId === product.id ? (
-                    <input
-                      type="number"
-                      value={
-                        editedProduct.stock === 0 ? "" : editedProduct.stock
-                      }
-                      onChange={(e) =>
-                        setEditedProduct({
-                          ...editedProduct,
-                          stock: Number(e.target.value),
-                        })
-                      }
-                      className="focus:ring-2 focus:ring-blue-500 outline-none rounded-sm border border-blue-500 ps-1"
-                    />
-                  ) : (
-                    product.stock
-                  )}
+                  {product.stock}
                 </td>
                 <td className="px-4 py-2">
-                  {editingId === product.id ? (
-                    <button
-                      className="bg-green-500 p-2 text-white rounded-full hover:bg-green-600"
-                      onClick={() => handleEditProduct(product.id)}
-                    >
-                      <Save className="w-4 h-4" />
-                    </button>
-                  ) : (
-                    <>
-                      <button
-                        className="bg-yellow-500 p-2 rounded-full text-white hover:bg-yellow-600 mr-2 transition-colors"
-                        onClick={() => {
-                          setEditingId(product.id);
-                          setEditedProduct(product);
-                        }}
-                      >
-                        <Edit2Icon className="w-4 h-4" />
-                      </button>
-                      <button
-                        className="bg-red-500 p-2 text-white rounded-full hover:bg-red-600 transition-colors"
-                        onClick={() => removeProductFromList(product.id)}
-                      >
-                        <TrashIcon className="w-4 h-4" />
-                      </button>
-                    </>
-                  )}
+                  <button
+                    className="bg-yellow-500 p-2 rounded-full text-white hover:bg-yellow-600 mr-2 transition-colors"
+                    onClick={() => {
+                      setEditingId(product.id);
+                      setEditedProduct(product);
+                      setShowEdit(true);
+                    }}
+                  >
+                    <Edit2Icon className="w-4 h-4" />
+                  </button>
+                  <button
+                    className="bg-red-500 p-2 text-white rounded-full hover:bg-red-600 transition-colors"
+                    onClick={() => removeProductFromList(product.id)}
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {showEdit && (
+        <ProductForm
+          onClose={() => {
+            setShowEdit(false);
+          }}
+          editedProduct={editedProduct}
+        />
+      )}
     </section>
   );
 };

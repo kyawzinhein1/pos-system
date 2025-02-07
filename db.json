@@ -17,23 +17,24 @@
     {
       "id": "37dd",
       "name": "Battery",
-      "category": "Power",
+      "category": "Gadget",
       "price": 300000,
-      "stock": 14
+      "stock": "15",
+      "": "30000"
     },
     {
       "id": "a040",
       "name": "Power Station 50000 W",
-      "category": "electronic",
-      "price": 350000,
-      "stock": 10
+      "category": "Electronic",
+      "price": "300000",
+      "stock": "15"
     },
     {
       "id": "3bc2",
-      "name": "demo",
-      "category": "demo testing",
-      "price": 200,
-      "stock": 71
+      "name": "Demo",
+      "category": "Demo Testing",
+      "price": "20000",
+      "stock": 19
     }
   ],
   "transactions": [
@@ -343,6 +344,57 @@
       "total": 200,
       "date": "06/02/2025",
       "time": "15:55:55"
+    },
+    {
+      "id": "0602202529287",
+      "products": [
+        {
+          "id": "3bc2",
+          "name": "demo",
+          "category": "demo testing",
+          "price": 200,
+          "stock": 71,
+          "quantity": 5,
+          "date": ""
+        }
+      ],
+      "total": 1000,
+      "date": "06/02/2025",
+      "time": "16:10:31"
+    },
+    {
+      "id": "0602202523107",
+      "products": [
+        {
+          "id": "a040",
+          "name": "Power Station 50000 W",
+          "category": "electronic",
+          "price": 350000,
+          "stock": 1,
+          "quantity": 1,
+          "date": ""
+        }
+      ],
+      "total": 350000,
+      "date": "06/02/2025",
+      "time": "16:11:28"
+    },
+    {
+      "id": "0702202555758",
+      "products": [
+        {
+          "id": "3bc2",
+          "name": "Demo",
+          "category": "Demo Testing",
+          "price": "20000",
+          "stock": "20",
+          "quantity": 1,
+          "date": ""
+        }
+      ],
+      "total": 20000,
+      "date": "07/02/2025",
+      "time": "16:35:52"
     }
   ]
 }
