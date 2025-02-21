@@ -39,7 +39,7 @@ const Invoice = ({ selectedProducts, trxnId, onClose, onSave }) => {
           <tbody>
             {selectedProducts.map((item, index) => (
               <tr key={index}>
-                <td className="border px-2 py-1">{item.name}</td>
+                <td className="border px-2 py-1">{item.productName}</td>
                 <td className="border px-2 py-1">{item.price}</td>
                 <td className="border px-2 py-1 text-center">
                   {item.quantity}

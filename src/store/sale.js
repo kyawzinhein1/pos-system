@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/products";
+const API_URL = "http://localhost:2200/products";
 
 const useSaleStore = create((set) => ({
     selectedProducts: [],
@@ -32,7 +32,7 @@ const useSaleStore = create((set) => ({
             }
 
             const productToAdd = state.products.find(
-                (p) => p.name === state.selectedProduct
+                (p) => p.productName === state.selectedProduct
             );
 
             if (!productToAdd) {

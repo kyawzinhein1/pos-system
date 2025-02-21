@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/transactions";
+const API_URL = "http://localhost:2200/products";
 
 const useTransactionStore = create((set) => ({
     transactions: [],

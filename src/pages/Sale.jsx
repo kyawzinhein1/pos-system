@@ -66,7 +66,7 @@ const Sale = () => {
     // check stock for showing invoice
     if (selectedProducts[0].stock >= selectedProducts[0].quantity) {
       await reduceStock(selectedProducts);
-      await saveTransaction(transactionDetail);
+      // await saveTransaction(transactionDetail);
       setTrxnId(transactionId);
       setShowInvoice(true);
     } else {
@@ -108,8 +108,8 @@ const Sale = () => {
           >
             <option hidden>Select Products</option>
             {products.map((product, index) => (
-              <option key={index} value={product.name}>
-                {product.name}
+              <option key={index} value={product.productName}>
+                {product.productName}
               </option>
             ))}
           </select>
@@ -119,7 +119,8 @@ const Sale = () => {
             className="border border-gray-400 px-4 py-2 rounded-md w-60"
             disabled
             value={
-              products.find((p) => p.name === selectedProduct)?.price || ""
+              products.find((p) => p.productName === selectedProduct)?.price ||
+              ""
             }
             placeholder="No item selected ..."
           />
@@ -128,10 +129,10 @@ const Sale = () => {
             type="number"
             placeholder="Enter quantity ..."
             className="border border-gray-400 px-4 py-2 rounded-md w-60"
-            value={quantity === 0 ? "" : quantity}
+            value={quantity || ""}
             onChange={(e) => {
               const value = e.target.value;
-              setQuantity(Number(value));
+              setQuantity(value ? Number(value) : "");
             }}
           />
 
@@ -202,7 +203,7 @@ const Sale = () => {
                       {selectedProducts.map((item, index) => (
                         <tr key={index} className="bg-white border-b">
                           <td className="py-2 text-center">{index + 1}</td>
-                          <td className="py-2 text-center">{item.name}</td>
+                          <td className="py-2 text-center">{item.productName}</td>
                           <td className="py-2 text-center">{item.price}</td>
                           <td className="py-2 text-center">{item.quantity}</td>
                           <td className="px-4 py-2 text-center">
@@ -226,7 +227,7 @@ const Sale = () => {
                               onClick={() => removeProduct(item.name)}
                               className="bg-red-500 p-1 text-white rounded-full hover:bg-red-600 transition-colors"
                             >
-                              <X className="w-4 h-4"/>
+                              <X className="w-4 h-4" />
                             </button>
                           </td>
                         </tr>

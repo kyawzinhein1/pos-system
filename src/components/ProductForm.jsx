@@ -2,9 +2,9 @@ import useProductStore from "../store/product";
 import { useState, useEffect } from "react";
 
 const ProductForm = ({ editedProduct, onClose }) => {
-  const { editProduct } = useProductStore();
+  const { editProduct, updateProductInList } = useProductStore();
   const [product, setProduct] = useState({
-    name: "",
+    productName: "",
     category: "",
     price: "",
     stock: "",
@@ -13,7 +13,13 @@ const ProductForm = ({ editedProduct, onClose }) => {
   // Set initial state when component mounts or when `editedProduct` changes
   useEffect(() => {
     if (editedProduct) {
-      setProduct(editedProduct);
+      setProduct({
+        id: editedProduct._id,
+        productName: editedProduct.productName || "", // Fix field name
+        category: editedProduct.category || "",
+        price: editedProduct.price || "",
+        stock: editedProduct.stock || "",
+      });
     }
   }, [editedProduct]);
 
@@ -22,9 +28,21 @@ const ProductForm = ({ editedProduct, onClose }) => {
   };
 
   const handleSaveProduct = async () => {
+    // if (
+    //   !product.productName||
+    //   !product.category ||
+    //   !product.price ||
+    //   !product.stock
+    // ) {
+    //   alert("Please fill in all fields.");
+    //   return;
+    // }
+
     if (product.id) {
-      await editProduct(product.id, product);
+      const updatedProduct = await editProduct(product.id, { ...product }); // Send product object directly
+      updateProductInList(updatedProduct);
     }
+    console.log(editProduct);
     onClose();
   };
 
@@ -37,9 +55,9 @@ const ProductForm = ({ editedProduct, onClose }) => {
         </label>
         <input
           type="text"
-          name="name"
+          name="productName"
           className="border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 mb-2"
-          value={product.name || ""}
+          value={product.productName}
           onChange={handleChange}
         />
         <label htmlFor="category" className="font-semibold text-md mb-2">
@@ -49,7 +67,7 @@ const ProductForm = ({ editedProduct, onClose }) => {
           type="text"
           name="category"
           className="border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 mb-2"
-          value={product.category || ""}
+          value={product.category}
           onChange={handleChange}
         />
 
@@ -60,7 +78,7 @@ const ProductForm = ({ editedProduct, onClose }) => {
           type="number"
           name="price"
           className="border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 mb-2"
-          value={product.price || ""}
+          value={product.price}
           onChange={handleChange}
         />
 
@@ -71,7 +89,7 @@ const ProductForm = ({ editedProduct, onClose }) => {
           type="number"
           name="stock"
           className="border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 mb-2"
-          value={product.stock || ""}
+          value={product.stock}
           onChange={handleChange}
         />
         <div className="flex justify-between">

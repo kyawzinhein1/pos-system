@@ -38,7 +38,7 @@ const Products = () => {
     }
 
     const newProduct = {
-      name,
+      productName :name,
       category,
       price: Number(price),
       stock: Number(stock),
@@ -67,11 +67,16 @@ const Products = () => {
   // };
 
   // Filter products based on search key
-  const filteredProducts = products.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchKey.toLowerCase().trim()) ||
-      product.category.toLowerCase().includes(searchKey.toLowerCase().trim())
-  );
+  const filteredProducts = (products || []).filter((product) => {
+    const name = product.productName ? product.productName.toLowerCase() : "";
+    const category = product.category ? product.category.toLowerCase() : "";
+
+    return (
+      name.includes(searchKey.toLowerCase().trim()) ||
+      category.includes(searchKey.toLowerCase().trim())
+    );
+  });
+
 
   return (
     <section className="container mx-auto mt-4">
@@ -158,7 +163,7 @@ const Products = () => {
                     product.stock <= 0 && "text-red-600 font-semibold"
                   }`}
                 >
-                  {product.name}
+                  {product.productName}
                 </td>
                 <td
                   className={`px-4 py-4 text-center ${
