@@ -15,6 +15,7 @@ const Transactions = () => {
   useEffect(() => {
     fetchTransactions();
   }, []);
+  
 
   const handleDetailShow = (transaction) => {
     setSelectedTransaction(transaction);
@@ -23,7 +24,7 @@ const Transactions = () => {
 
   // Filter transactions based on search term
   const filteredTransactions = transactions.filter((transaction) =>
-    transaction.id.toLowerCase().includes(searchTerm.toLowerCase())
+    (transaction.transactionId || "").includes(searchTerm)
   );
 
   // Export to Excel function with styling
@@ -124,13 +125,18 @@ const Transactions = () => {
               </tr>
             ) : (
               filteredTransactions.map((transaction, index) => (
-                <tr key={transaction.id} className="border">
+                <tr key={transaction.transactionId} className="border">
                   <td className="px-2 py-2 text-center">{index + 1}</td>
-                  <td className="py-2 text-center">{transaction.id}</td>
                   <td className="py-2 text-center">
-                    {transaction.products
-                      .map((trxn) => `${trxn.name} (x${trxn.quantity})`)
-                      .join(", ")}
+                    {transaction.transactionId}
+                  </td>
+                  <td className="py-2 text-center">
+                    {Array.isArray(transaction.products) &&
+                    transaction.products.length > 0
+                      ? transaction.products
+                          .map((trxn) => `${trxn.productName} (x${trxn.quantity})`)
+                          .join(", ")
+                      : "No products"}
                   </td>
                   <td className="pe-10 py-2 text-end">{transaction.total}</td>
                   <td className="px-4 py-2 text-center">{transaction.date}</td>
@@ -162,7 +168,7 @@ const Transactions = () => {
       {showDetail && (
         <TransactionDetail
           selectedProducts={selectedTransaction.products}
-          trxnId={selectedTransaction.id}
+          trxnId={selectedTransaction.transactionId}
           date={selectedTransaction.date}
           time={selectedTransaction.time}
           total={selectedTransaction.total}

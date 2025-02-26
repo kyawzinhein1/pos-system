@@ -75,15 +75,14 @@ const useProductStore = create((set) => ({
                     continue;
                 }
 
-                console.log("Updating stock for product:", productData);
-                console.log("Sold item:", soldItem.quantity);
-                console.log("new stock:", newStock);
+                // console.log("Updating stock for product:", productData);
+                // console.log("Sold item:", soldItem.quantity);
+                // console.log("new stock:", newStock);
 
                 // Correctly reference _id or id based on your backend data
-                const updateUrl = await axios.patch(`${API_URL}/${id}`, {
+                const sellProduct = await axios.patch(`${API_URL}/${id}`, {
                     stock: newStock,
                 });
-                console.log(updateUrl);
 
                 // Update local state
                 set((state) => ({

@@ -49,7 +49,7 @@ const Sale = () => {
 
     // transaction object
     const transactionDetail = {
-      id: transactionId, // Unique order ID
+      transactionId, // Unique order ID
       products: selectedProducts,
       total: selectedProducts.reduce(
         (sum, item) => sum + item.price * item.quantity,
@@ -63,10 +63,31 @@ const Sale = () => {
       }),
     };
 
+    console.log("Transaction Details:", transactionDetail);
+
+      if (
+        !transactionDetail.transactionId ||
+        !transactionDetail.total ||
+        !transactionDetail.date ||
+        !transactionDetail.time
+      ) {
+        console.error("Missing required fields in transaction!");
+        return;
+      }
+
+      if (
+        selectedProducts.some(
+          (item) => !item.productName || !item.price || !item.quantity
+        )
+      ) {
+        console.error("One or more products have missing details!");
+        return;
+      }
+
     // check stock for showing invoice
     if (selectedProducts[0].stock >= selectedProducts[0].quantity) {
       await reduceStock(selectedProducts);
-      // await saveTransaction(transactionDetail);
+      await saveTransaction(transactionDetail);
       setTrxnId(transactionId);
       setShowInvoice(true);
     } else {
@@ -277,7 +298,7 @@ const Sale = () => {
             clearSelectedProducts("");
           }}
           onSave={() => {
-            saveTransaction();
+            saveTransaction(transactionDetail);
           }}
         />
       )}
