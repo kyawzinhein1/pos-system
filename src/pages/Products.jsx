@@ -46,10 +46,10 @@ const Products = () => {
   }, []);
 
   const filteredProducts = useMemo(() => {
-    return products.filter(
+    return (products || []).filter(
       (product) =>
-        product.productName.toLowerCase().includes(searchKey.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchKey.toLowerCase())
+        product?.productName?.toLowerCase().includes(searchKey.toLowerCase()) ||
+        product?.category?.toLowerCase().includes(searchKey.toLowerCase())
     );
   }, [products, searchKey]);
 

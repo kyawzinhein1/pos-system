@@ -18,21 +18,25 @@ const useProductStore = create((set) => ({
     },
 
     // Add product to the backend and update state
-    addProduct: async (newProduct) => {
+    addProduct: async (productData) => {
         try {
-            const response = await axios.post(API_URL, newProduct);
-
-            set((state) => {
-                const updatedProducts = [...state.products, response.data];
-
-                // Update local storage immediately within the set function
-                localStorage.setItem("products", JSON.stringify(updatedProducts));
-
-                return { products: updatedProducts };
-            });
-
+            const response = await axios.post(API_URL, productData);
+            console.log("Product added:", response.data);
         } catch (error) {
-            console.error("Error adding product:", error);
+            console.error("Error adding product:", error);  // Log full error object
+
+            if (error.response) {
+                console.error("Error Response:", error.response);  // Log full response error
+                if (error.response.status === 400) {
+                    alert(error.response.data.message);  // Show alert if fields are missing
+                } else if (error.response.status === 409) {
+                    alert("Product name already exists!");  // Alert when product name already exists
+                }
+            } else if (error.request) {
+                console.error("Error Request:", error.request);  // Log request error if no response
+            } else {
+                console.error("Error Message:", error.message);  // Log message error
+            }
         }
     },
 
