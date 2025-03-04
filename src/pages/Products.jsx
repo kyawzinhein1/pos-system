@@ -5,12 +5,8 @@ import BackBtn from "../components/BackBtn";
 import ProductForm from "../components/ProductForm";
 
 const Products = () => {
-  const {
-    products,
-    fetchProducts,
-    addProduct,
-    removeProductFromList,
-  } = useProductStore();
+  const { products, fetchProducts, addProduct, removeProductFromList } =
+    useProductStore();
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -38,45 +34,36 @@ const Products = () => {
     }
 
     const newProduct = {
-      productName :name,
+      productName: name,
       category,
       price: Number(price),
       stock: Number(stock),
     };
 
     await addProduct(newProduct);
+    await fetchProducts(); // Refetch products to update the UI
     setName("");
     setCategory("");
     setPrice("");
     setStock("");
   };
 
-
-  // const handleEditProduct = async (id) => {
-  //   if (
-  //     !editedProduct.name ||
-  //     !editedProduct.category ||
-  //     !editedProduct.price ||
-  //     !editedProduct.stock
-  //   ) {
-  //     alert("Please fill all field.");
-  //     return;
-  //   }
-  //   await editProduct(id, editedProduct);
-  //   setEditingId(null);
-  // };
+  const handleRemoveProduct = async (_id) => { 
+    await removeProductFromList(_id);
+    await fetchProducts(); // Refetch products to update the UI
+  }
 
   // Filter products based on search key
-  const filteredProducts = (products || []).filter((product) => {
-    const name = product.productName ? product.productName.toLowerCase() : "";
-    const category = product.category ? product.category.toLowerCase() : "";
-
-    return (
-      name.includes(searchKey.toLowerCase().trim()) ||
-      category.includes(searchKey.toLowerCase().trim())
-    );
-  });
-
+  const filteredProducts = Array.isArray(products)
+    ? products.filter((product) => {
+        return (
+          product?.productName
+            ?.toLowerCase()
+            .includes(searchKey.toLowerCase()) ||
+          product?.category?.toLowerCase().includes(searchKey.toLowerCase())
+        );
+      })
+    : [];
 
   return (
     <section className="container mx-auto mt-4">
@@ -199,7 +186,7 @@ const Products = () => {
                   </button>
                   <button
                     className="bg-red-500 p-2 text-white rounded-full hover:bg-red-600 transition-colors"
-                    onClick={() => removeProductFromList(product.id)}
+                    onClick={() => {handleRemoveProduct(product._id)}}
                   >
                     <TrashIcon className="w-4 h-4" />
                   </button>

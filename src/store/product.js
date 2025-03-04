@@ -6,91 +6,99 @@ const API_URL = "http://localhost:2200/products";
 const useProductStore = create((set) => ({
     products: [],
 
-    // fetching products
+    // Fetching products
     fetchProducts: async () => {
         try {
             const response = await axios.get(API_URL);
-            set({ products: response.data });
+            set({ products: response.data || [] }); // Ensure it's always an array
         } catch (error) {
-            console.error(
-                "Error fetching products:",
-                error.response?.data?.message || error.message
-            );
+            console.error("Error fetching products:", error);
+            set({ products: [] }); // Avoid undefined state
         }
     },
-    // add product
-    addProduct: (newProduct) => {
-        set((state) => {
-            const updatedProducts = [...state.products, newProduct];
-            localStorage.setItem("products", JSON.stringify(updatedProducts)); // Persist
-            return { products: updatedProducts };
-        });
+
+    // Add product to the backend and update state
+    addProduct: async (newProduct) => {
+        try {
+            const response = await axios.post(API_URL, newProduct);
+
+            set((state) => {
+                const updatedProducts = [...state.products, response.data];
+
+                // Update local storage immediately within the set function
+                localStorage.setItem("products", JSON.stringify(updatedProducts));
+
+                return { products: updatedProducts };
+            });
+
+        } catch (error) {
+            console.error("Error adding product:", error);
+        }
     },
 
-    // edit product
-    editProduct: async (id, updatedProduct) => {
+
+    // Edit an existing product
+    editProduct: async (_id, updatedProduct) => {
         try {
-            const response = await axios.put(`${API_URL}/${id}`, updatedProduct);
+            const response = await axios.put(`${API_URL}/${_id}`, updatedProduct);
+
             set((state) => ({
                 products: state.products.map((product) =>
-                    product.id === id ? response.data : product
+                    product._id === _id ? response.data : product
                 ),
             }));
+
+            return response.data; // Ensure we return the updated product
         } catch (error) {
-            console.error("Error editing products", error);
+            console.error("Error editing product:", error);
+            return null; // Return null if there's an error
         }
     },
 
-    // remove a product
-    removeProductFromList: async (id) => {
+    // Remove product from backend and update state
+    removeProductFromList: async (_id) => {
         try {
+            await axios.delete(`${API_URL}/${_id}`);
             set((state) => ({
-                products: state.products.filter((p) => p.id !== id),
+                products: state.products.filter((p) => p._id !== _id),
             }));
         } catch (error) {
-            console.error("Error removing product", error);
+            console.error("Error removing product:", error);
         }
     },
 
     // Reduce stock when a product is sold
     reduceStock: async (soldItems) => {
         try {
-            for (const soldItem of soldItems) {
-                const id = soldItem._id;
-                // Fetch product details by name to get the correct ID
-                const response = await axios.get(`${API_URL}/${id}`);
+            set((state) => {
+                let updatedProducts = [...state.products];
 
-                const productData = response.data; // Assuming you get an array and need the first item
-
-                if (!productData || !productData._id) {
-                    console.error(
-                        `Product "${soldItem.productName}" not found or missing ID!`
+                soldItems.forEach((soldItem) => {
+                    const productIndex = updatedProducts.findIndex(
+                        (p) => p.id === soldItem.id
                     );
-                    continue; // Skip this product if there's an issue
-                }
+                    if (productIndex !== -1) {
+                        const product = updatedProducts[productIndex];
 
-                const newStock = productData.stock - soldItem.quantity;
-                if (newStock < 0) {
-                    alert(`Not enough stock for ${soldItem.productName}!`);
-                    continue;
-                }
+                        const newStock = product.stock - soldItem.quantity;
+                        if (newStock < 0) {
+                            alert(`Not enough stock for ${soldItem.productName}!`);
+                            return;
+                        }
 
-                // console.log("Updating stock for product:", productData);
-                // console.log("Sold item:", soldItem.quantity);
-                // console.log("new stock:", newStock);
+                        updatedProducts[productIndex] = { ...product, stock: newStock };
 
-                // Correctly reference _id or id based on your backend data
-                const sellProduct = await axios.patch(`${API_URL}/${id}`, {
-                    stock: newStock,
+                        // Update backend stock
+                        axios
+                            .put(`${API_URL}/${soldItem.id}`, { stock: newStock })
+                            .catch((error) => {
+                                console.error("Error updating stock:", error);
+                            });
+                    }
                 });
 
-                // Update local state
-                set((state) => ({
-                    products: state.products.map((p) =>
-                        p._id === productData._id ? { ...p, stock: newStock } : p
-                    ),
-                }));
-            }
+                return { products: updatedProducts };
+            });
         } catch (error) {
             console.error("Error reducing stock:", error);
         }

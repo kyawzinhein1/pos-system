@@ -14,7 +14,7 @@ const ProductForm = ({ editedProduct, onClose }) => {
   useEffect(() => {
     if (editedProduct) {
       setProduct({
-        id: editedProduct._id,
+        _id: editedProduct._id,
         productName: editedProduct.productName || "", // Fix field name
         category: editedProduct.category || "",
         price: editedProduct.price || "",
@@ -28,26 +28,20 @@ const ProductForm = ({ editedProduct, onClose }) => {
   };
 
   const handleSaveProduct = async () => {
-    // if (
-    //   !product.productName||
-    //   !product.category ||
-    //   !product.price ||
-    //   !product.stock
-    // ) {
-    //   alert("Please fill in all fields.");
-    //   return;
-    // }
-
-    if (product.id) {
-      const updatedProduct = await editProduct(product.id, { ...product }); // Send product object directly
-      updateProductInList(updatedProduct);
+    if (product._id) {
+      try {
+        const updatedProduct = await editProduct(product._id, product);
+        updateProductInList(updatedProduct);
+      } catch (error) {
+        console.error("Error updating product:", error);
+      }
     }
-    console.log(editProduct);
     onClose();
   };
 
   return (
     <section className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      {console.log("Product edit Form rendered.")}
       <div className="bg-white p-6 rounded-lg w-[400px] shadow-lg flex flex-col">
         <h1 className="text-xl font-semibold mb-4 text-center">Product Edit</h1>
         <label htmlFor="name" className="font-semibold text-md mb-2">
