@@ -71,38 +71,39 @@ const useProductStore = create((set) => ({
         }
     },
 
-    // Reduce stock when a product is sold
+    // Reduce stock after sale
     reduceStock: async (soldItems) => {
         try {
-            set((state) => {
-                let updatedProducts = [...state.products];
+            const updatedProducts = [];
 
-                soldItems.forEach((soldItem) => {
-                    const productIndex = updatedProducts.findIndex(
-                        (p) => p.id === soldItem.id
-                    );
-                    if (productIndex !== -1) {
-                        const product = updatedProducts[productIndex];
+            for (const soldItem of soldItems) {
+                const productIndex = useProductStore.getState().products.findIndex(
+                    (p) => p._id === soldItem._id // Ensure `_id` matches
+                );
 
-                        const newStock = product.stock - soldItem.quantity;
-                        if (newStock < 0) {
-                            alert(`Not enough stock for ${soldItem.productName}!`);
-                            return;
-                        }
+                if (productIndex !== -1) {
+                    const product = useProductStore.getState().products[productIndex];
+                    const newStock = product.stock - soldItem.quantity;
 
-                        updatedProducts[productIndex] = { ...product, stock: newStock };
-
-                        // Update backend stock
-                        axios
-                            .put(`${API_URL}/${soldItem.id}`, { stock: newStock })
-                            .catch((error) => {
-                                console.error("Error updating stock:", error);
-                            });
+                    if (newStock < 0) {
+                        alert(`Not enough stock for ${soldItem.productName}!`);
+                        return;
                     }
-                });
 
-                return { products: updatedProducts };
-            });
+                    const updatedProduct = { ...product, stock: newStock };
+                    updatedProducts.push(updatedProduct);
+
+                    // Update backend stock
+                    await axios.put(`${API_URL}/${soldItem._id}`, updatedProduct);
+                }
+            }
+
+            // Update Zustand state
+            set((state) => ({
+                products: state.products.map((product) =>
+                    updatedProducts.find((p) => p._id === product._id) || product
+                ),
+            }));
         } catch (error) {
             console.error("Error reducing stock:", error);
         }
